@@ -4,28 +4,29 @@ const Comment = require('../models/Comment');
 exports.uploadVideo = async (req, res) => {
   try {
     const { caption, hashtags } = req.body;
-    // `req.file` contains the uploaded file info from Multer
     if (!req.file) {
       return res.status(400).json({ msg: 'No video file provided' });
     }
 
+    // `req.file.location` is provided by multer-s3, but pointing to R2
     const newVideo = new Video({
       user: req.user.id,
-      videoPath: req.file.path, // or req.file.filename, depending on how you store
+      videoPath: req.file.location, 
       caption: caption || '',
       hashtags: hashtags ? hashtags.split(',').map(ht => ht.trim()) : []
     });
 
     await newVideo.save();
+
     return res.json({ msg: 'Video uploaded successfully', video: newVideo });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ msg: 'Server Error' });
   }
 };
 
 exports.getFeed = async (req, res) => {
   try {
-    // For MVP, just return all videos sorted by newest
     const videos = await Video.find({})
       .populate('user', 'username')
       .sort({ createdAt: -1 });
