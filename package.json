@@ -1,0 +1,12 @@
+{
+  "name": "thenews",
+  "version": "1.0.0",
+  "description": "This is to create a tik tok similar app that people can use in America.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
